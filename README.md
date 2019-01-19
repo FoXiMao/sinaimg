@@ -8,4 +8,4 @@
 最后，如果对这款源码有改进意见的，欢迎给我留言哟~~
 
 #演示图片
-![演示图片](你刚复制的图片路径)
+![演示图片](https://github.com/CitronsBlog/sinaimg/blob/master/sina.png)
