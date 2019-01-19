@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新浪图床 - Citrons博客</title>
+      <link rel="shortout icon" href="../timg.png" />
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script src="js/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    $("#imgboxs #insert_img").click(function() {
+        if ($('#img_title').val()) {
+            var img_title = $('#img_title').val();
+        } else {
+            var img_title = $('#title').val();
+        }
+        if ($('#img_alt').val()) {
+            var img_alt = $('#img_alt').val();
+
+        } else {
+            var img_alt = $('#title').val();
+        }
+        if ($('#url').val()) {
+            $($(".ke-edit-iframe:first").contents().find(".ke-content")).append("<a target='_blank' href='" + ($('#url').val()) + "'><img src='" + ($('#url').val()) + "' title='" + img_title + "' alt='" + img_alt + "' border='0' width='" + ($('#img_width').val()) + "' height='" + ($('#img_height').val()) + "' /></a>");
+        } else {
+            alert('未上传图片');
+        }
+    });
+    $("#close_gj").click(function() {
+        $("#img_cons").slideUp(200);
+    });
+    $("#img_titles").click(function() {
+        $("#img_cons").toggle();
+    });
+    $("#clear_img").click(function() {
+        $("#img").hide();
+
+        $('#button')[0].innerHTML = '选择本地图片';
+    });
+
+});
+
+    function copyTextAreaCt() {
+    var oContent = document.getElementById("url");
+    oContent.select(); // 选择对象
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    obj = document.getElementById("fztext");
+    obj.value = "已复制";
+    setTimeout(function() {
+        obj.value = "复制";
+    },
+    2000);
+
+}
+    function copyCodeAreaCt() {
+    var oContent = document.getElementById("footer_code");
+    oContent.select(); // 选择对象
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    obj = document.getElementById("fzcode");
+    obj.value = "已复制";
+    setTimeout(function() {
+        obj.value = "复制";
+    },
+    2000);
+
+}
+  </script></head>
+<body style="position: static;">
+  <div id="blur-img" style="opacity: .8;position: fixed;height: 100%;width: 100%;overflow: hidden;">
+    <svg xmlns="https://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveAspectRatio="none">
+      <filter id="blur_a4btc1gzs">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="50"></feGaussianBlur>
+      </filter>
+      <image width="100%" height="100%" id="background" externalresourcesrequired="true" xlink:href="" style="filter:url(#blur_a4btc1gzs);" preserveAspectRatio="none"></image>
+    </svg>
+  </div>
+  <div id="box">
+    <div id="psdp-wrap">
+      <div class="psdp-cont">
+        <span class="psdp-title">欢迎使用新浪图床 © 由<a href="http://www.citrons.cn/" target="_blank">Citrons</a>运营</span>
+        <div class="psdp-input">
+          <input type="file" accept="image/*" style="display:none;" id="file">
+          <button type="button" class="psdp-btn" onclick="file.click()" id="button">选择本地图片</button>
+          <p id="texts">
+            <input class="psdp-pwd" autocomplete="off">
+            <div id="fuzhi">
+              <input type="button" onClick="copyTextAreaCt()" class="fuzhi" id="fztext" value="复制" /></div>
+          </p>
+        </div>
+        <div class="psdp-input" style="display:none;" id="code">
+          <textarea id="footer_code" class="of-input"></textarea>
+          <input type="button" onClick="copyCodeAreaCt()" class="fuzhi fzcode" id="fzcode" value="复制" /></div>
+        <div id="more" style="display:none;">
+          <input type="text" id="img_width" name="img_width">
+          <input type="text" id="img_height" name="img_height"></div>
+      </div>
+    </div>
+    <div class="footer">在法律允许的范围内，请随意使用本图床。严禁上传含有色情、暴力、宣扬恐怖主义的图片。</div>
+      <script>
+    $(document).ready(function() {
+    $('.picurl > input').bind('focus mouseover',
+    function() {
+        if (this.value) {
+            this.select()
+        }
+    });
+    $("input[type='file']").change(function(e) {
+        images_upload(this.files)
+    });
+    var obj = $('body');
+    obj.on('dragenter',
+    function(e) {
+        e.stopPropagation();
+        e.preventDefault()
+    });
+    obj.on('dragover',
+    function(e) {
+        e.stopPropagation();
+        e.preventDefault()
+    });
+    obj.on('drop',
+    function(e) {
+        e.preventDefault();
+        images_upload(e.originalEvent.dataTransfer.files)
+    })
+});
+    var images_upload = function(files) {
+    var flag = 0;
+    // $('textarea').empty();
+    $(files).each(function(key, value) {
+        $('#button')[0].innerHTML = '上传中';
+        image_form = new FormData();
+        image_form.append('file', value);
+        console.log(image_form);
+        $.ajax({
+            url: 'https://www.yanwz.cn/sinaimg/sinaimg.php?type=multipart',
+            type: 'POST',
+            data: image_form,
+            mimeType: 'multipart/form-data',
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: 'json',
+            success: function(data) {
+                if (data.code == '200') {
+                    flag++;
+                    if (typeof data.pid != 'null') {
+                        $("#img").show();
+                        $("#fuzhi").show();
+                        $("#code").show();
+                        $("#footer_code").html('<img src="picture/ed8c339c8a0a46d29ee8fc2373ba221d.gif' + data['pid'] + '.jpg" width="' + data['width'] + 'px" height="' + data['height'] + 'px">');
+                        $("#texts").html('<input type="text" id="url" class="psdp-pwd" value="https://ww2.sinaimg.cn/large/' + data['pid'] + '.jpg">');
+                        $("#background").attr('xlink:href', 'https://ww2.sinaimg.cn/large/' + data['pid'] + '.jpg');
+						$width = $(window).width(); 
+                        if($width < 720){ $("#psdp-wrap").attr('style', 'background:url(https://ww2.sinaimg.cn/large/' + data['pid'] + '.jpg) center 90px no-repeat;background-size:90% 200px;');} else if($width > 720){
+                        $("#psdp-wrap").attr('style', 'background:url(https://ww2.sinaimg.cn/large/' + data['pid'] + '.jpg) center 90px no-repeat;background-size:60% 240px;');
+						}
+                        $("#img_width").val(data['width'] + 'px');
+                        $("#img_height").val(data['height'] + 'px');
+                    }
+                    if (flag == $("input[type='file']")[0].files.length) {
+                        if (typeof data.pid != 'null') {
+                            $('#button')[0].innerHTML = '上传成功';
+                            setTimeout(function() {
+                                $('#button')[0].innerHTML = '重新上传';
+                            },
+                            2000);
+                        } else {
+                            $('#button')[0].innerHTML = '上传失败';
+                            alert('上传出错，请联系QQ909229731');
+                        }
+                    }
+                } else {
+                    alert(data.msg);
+                    $('#button')[0].innerHTML = '上传失败';
+                }
+            },
+            error: function(XMLResponse) {
+                $('#button')[0].innerHTML = '上传失败';
+                alert("error:" + XMLResponse.responseText);
+            }
+        })
+    })
+};
+    document.onpaste = function(e) {
+    var data = e.clipboardData;
+    for (var i = 0; i < data.items.length; i++) {
+        var item = data.items[i];
+        if (item.kind == 'file' && item.type.match(/^image\//i)) {
+            var blob = item.getAsFile();
+            images_upload(blob)
+        }
+    }
+}
+          </script>
+  </div>
+</body>
+</html>
